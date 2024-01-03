@@ -21,8 +21,6 @@ const ExerciseFrom: React.FC<ExercisesFormProps> = ({navigation}) => {
   const onFocus = useCallback(() => {
     const parent = navigation.getParent();
     parent?.setOptions({headerShown: false});
-
-    return () => parent?.setOptions({headerShown: false});
   }, [navigation]);
 
   useFocusEffect(onFocus);

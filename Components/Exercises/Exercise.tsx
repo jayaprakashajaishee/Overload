@@ -1,7 +1,5 @@
 import React, {useCallback} from 'react';
 import {
-  View,
-  Text,
   Box,
   Stack,
   FormControl,
@@ -20,8 +18,6 @@ const Exercise: React.FC<ExerciseProps> = ({navigation, route}) => {
   const onFocus = useCallback(() => {
     const parent = navigation.getParent();
     parent?.setOptions({headerShown: false});
-
-    return () => parent?.setOptions({headerShown: false});
   }, [navigation]);
 
   const exercise = useAppSelector(state => state.exercises).find(

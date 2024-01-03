@@ -7,23 +7,17 @@ import {
 import {RootStackParamList} from '../../types';
 import ExerciseFrom from './ExerciseForm';
 import Exercise from './Exercise';
+import Exercises from './Exercises';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const ExercisePage: React.FC<ExercisesProps> = ({navigation}) => {
+const ExercisePage: React.FC<ExercisesProps> = () => {
   return (
     <Stack.Navigator initialRouteName="Exercises">
       <Stack.Screen
         name="Exercises"
-        component={() => (
-          <Button
-            shadow={2}
-            onPress={() => {
-              navigation.navigate('ExerciseForm');
-            }}>
-            Click me
-          </Button>
-        )}
+        component={Exercises}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="ExerciseForm"
