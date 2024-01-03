@@ -11,6 +11,12 @@ import {Text, Button, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
+import ExercisePage from './Components/Exercises/ExercisesPage';
+import {NativeBaseProvider} from 'native-base';
+import {RootStackParamList} from './types';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {Provider} from 'react-redux';
+import {store} from './Store';
 
 const HomeScreen: React.FC<HomeProps> = ({navigation}) => {
   return (
@@ -30,34 +36,27 @@ const HomeScreen: React.FC<HomeProps> = ({navigation}) => {
   );
 };
 
-const DetailsScreen: React.FC<ExercisesProps> = () => {
-  return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Details Screen</Text>
-    </View>
-  );
-};
-
 const Drawer = createDrawerNavigator<RootStackParamList>();
 
 function App(): React.JSX.Element {
   return (
-    <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="Exercises" component={DetailsScreen} />
-      </Drawer.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <SafeAreaProvider>
+        <NativeBaseProvider>
+          <NavigationContainer>
+            <Drawer.Navigator
+              initialRouteName="Home"
+              screenOptions={{swipeEnabled: true, swipeEdgeWidth: 100}}>
+              <Drawer.Screen name="Home" component={HomeScreen} />
+              <Drawer.Screen name="Exercises" component={ExercisePage} />
+            </Drawer.Navigator>
+          </NavigationContainer>
+        </NativeBaseProvider>
+      </SafeAreaProvider>
+    </Provider>
   );
 }
 
 export default App;
 
-type RootStackParamList = {
-  Home: undefined;
-  Exercises: undefined;
-  Settings: undefined;
-};
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
-type ExercisesProps = NativeStackScreenProps<RootStackParamList, 'Exercises'>;
-// type SettingsProps = NativeStackScreenProps<RootStackParamList, 'Settings'>;
