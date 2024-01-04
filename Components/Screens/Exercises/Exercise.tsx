@@ -6,6 +6,7 @@ import {
   Input,
   WarningOutlineIcon,
   Button,
+  FlatList,
 } from 'native-base';
 import {useAppSelector, useAppDispatch} from '../../../Store';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -14,6 +15,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {useForm, Controller} from 'react-hook-form';
 import {editExerciseName} from '../../../Reducers/ExerciseReducer';
 import {Keyboard} from 'react-native';
+import SetCard from '../../SetCard';
 
 const Exercise: React.FC<ExerciseProps> = ({navigation, route}) => {
   const dispatch = useAppDispatch();
@@ -60,6 +62,7 @@ const Exercise: React.FC<ExerciseProps> = ({navigation, route}) => {
                 onChangeText={onChange}
                 value={value}
                 size={'xl'}
+                onSubmitEditing={onSubmit}
               />
               {errors.name && (
                 <FormControl.ErrorMessage
@@ -70,7 +73,14 @@ const Exercise: React.FC<ExerciseProps> = ({navigation, route}) => {
             </FormControl>
           )}
         />
+        {/* {exercise?.sets.map(set => (
+          <Text>{set.id}</Text>
+        ))} */}
       </Stack>
+      <FlatList
+        data={exercise?.sets}
+        renderItem={({item, index}) => <SetCard set={item} index={index} />}
+      />
       {watch('name') !== exercise?.name && (
         <Button onPress={onSubmit} mx={10} mb={4}>
           Save

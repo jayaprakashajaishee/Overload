@@ -23,8 +23,6 @@ const ExerciseFrom: React.FC<ExercisesFormProps> = ({navigation}) => {
     parent?.setOptions({headerShown: false});
   }, [navigation]);
 
-  useFocusEffect(onFocus);
-
   const {
     control,
     handleSubmit,
@@ -43,6 +41,8 @@ const ExerciseFrom: React.FC<ExercisesFormProps> = ({navigation}) => {
     reset();
     navigation.navigate('ExercisesList');
   });
+
+  useFocusEffect(onFocus);
 
   return (
     <Box w="100%" maxWidth="100%" flex={1} justifyContent="space-between">
