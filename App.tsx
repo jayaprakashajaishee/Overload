@@ -11,8 +11,8 @@ import {Text, Button, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import ExercisePage from './Components/Exercises/ExercisesPage';
 import {NativeBaseProvider} from 'native-base';
+import ExerciseNavigator from './Components/Navigator/ExercisesNavigator';
 import {RootStackParamList} from './types';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Provider} from 'react-redux';
@@ -30,7 +30,9 @@ const HomeScreen: React.FC<HomeProps> = ({navigation}) => {
       <Text>Home Screen</Text>
       <Button
         title="Go to Details"
-        onPress={() => navigation.navigate('Exercises')}
+        onPress={() =>
+          navigation.navigate('Exercises', {screen: 'ExercisesList'})
+        }
       />
     </View>
   );
@@ -48,7 +50,7 @@ function App(): React.JSX.Element {
               initialRouteName="Home"
               screenOptions={{swipeEnabled: true, swipeEdgeWidth: 100}}>
               <Drawer.Screen name="Home" component={HomeScreen} />
-              <Drawer.Screen name="Exercises" component={ExercisePage} />
+              <Drawer.Screen name="Exercises" component={ExerciseNavigator} />
             </Drawer.Navigator>
           </NavigationContainer>
         </NativeBaseProvider>

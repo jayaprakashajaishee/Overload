@@ -1,21 +1,20 @@
 import React from 'react';
-import {Button} from 'native-base';
 import {
   NativeStackScreenProps,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../types';
-import ExerciseFrom from './ExerciseForm';
-import Exercise from './Exercise';
-import Exercises from './Exercises';
+import ExerciseFrom from '../Screens/Exercises/ExerciseForm';
+import Exercise from '../Screens/Exercises/Exercise';
+import Exercises from '../Screens/Exercises/Exercises';
+import {ExercisesStackParamList, RootStackParamList} from '../../types';
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator<ExercisesStackParamList>();
 
-const ExercisePage: React.FC<ExercisesProps> = () => {
+const ExerciseNavigator: React.FC<ExercisesProps> = () => {
   return (
-    <Stack.Navigator initialRouteName="Exercises">
+    <Stack.Navigator initialRouteName="ExercisesList">
       <Stack.Screen
-        name="Exercises"
+        name="ExercisesList"
         component={Exercises}
         options={{headerShown: false}}
       />
@@ -29,6 +28,6 @@ const ExercisePage: React.FC<ExercisesProps> = () => {
   );
 };
 
-export default ExercisePage;
+export default ExerciseNavigator;
 
 type ExercisesProps = NativeStackScreenProps<RootStackParamList, 'Exercises'>;

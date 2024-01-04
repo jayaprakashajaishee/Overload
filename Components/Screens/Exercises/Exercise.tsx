@@ -1,48 +1,49 @@
 import React, {useCallback} from 'react';
 import {
   Box,
-  FormControl,
   Stack,
+  FormControl,
   Input,
   WarningOutlineIcon,
   Button,
-  Slider,
 } from 'native-base';
+import {useAppSelector, useAppDispatch} from '../../../Store';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../types';
-import {useForm, Controller} from 'react-hook-form';
-import {useAppDispatch} from '../../Store';
-import {addExercise} from '../../Reducers/ExerciseReducer';
-import uuid from 'react-native-uuid';
+import {ExercisesStackParamList} from '../../../types';
 import {useFocusEffect} from '@react-navigation/native';
+import {useForm, Controller} from 'react-hook-form';
+import {editExerciseName} from '../../../Reducers/ExerciseReducer';
+import {Keyboard} from 'react-native';
 
-const ExerciseFrom: React.FC<ExercisesFormProps> = ({navigation}) => {
+const Exercise: React.FC<ExerciseProps> = ({navigation, route}) => {
   const dispatch = useAppDispatch();
+  const {id} = route.params;
   const onFocus = useCallback(() => {
     const parent = navigation.getParent();
     parent?.setOptions({headerShown: false});
   }, [navigation]);
 
-  useFocusEffect(onFocus);
+  const exercise = useAppSelector(state => state.exercises).find(
+    _exercise => _exercise.id === id,
+  );
 
   const {
     control,
     handleSubmit,
-    reset,
+    watch,
     formState: {errors},
   } = useForm<FormData>({
     defaultValues: {
-      name: '',
-      sets: 1,
+      name: exercise?.name,
     },
   });
-
   const onSubmit = handleSubmit(data => {
-    const id = uuid.v4().toString();
-    dispatch(addExercise({id, ...data}));
-    reset();
-    navigation.navigate('Exercise', {id});
+    exercise && dispatch(editExerciseName({id: exercise.id, value: data.name}));
+
+    Keyboard.dismiss();
   });
+
+  useFocusEffect(onFocus);
 
   return (
     <Box w="100%" maxWidth="100%" flex={1} justifyContent="space-between">
@@ -69,44 +70,23 @@ const ExerciseFrom: React.FC<ExercisesFormProps> = ({navigation}) => {
             </FormControl>
           )}
         />
-        <Controller
-          name="sets"
-          control={control}
-          rules={{required: true}}
-          render={({field: {onChange, value}}) => (
-            <FormControl>
-              <FormControl.Label>No of Sets {value}</FormControl.Label>
-              <Slider
-                size={'lg'}
-                defaultValue={1}
-                value={value}
-                onChange={onChange}
-                maxValue={15}
-                minValue={1}>
-                <Slider.Track>
-                  <Slider.FilledTrack />
-                </Slider.Track>
-                <Slider.Thumb />
-              </Slider>
-            </FormControl>
-          )}
-        />
       </Stack>
-      <Button onPress={onSubmit} mx={10} mb={4}>
-        Save
-      </Button>
+      {watch('name') !== exercise?.name && (
+        <Button onPress={onSubmit} mx={10} mb={4}>
+          Save
+        </Button>
+      )}
     </Box>
   );
 };
 
-export default ExerciseFrom;
-
-type ExercisesFormProps = NativeStackScreenProps<
-  RootStackParamList,
-  'ExerciseForm'
+type ExerciseProps = NativeStackScreenProps<
+  ExercisesStackParamList,
+  'Exercise'
 >;
 
 type FormData = {
   name: string;
-  sets: number;
 };
+
+export default Exercise;
