@@ -3,12 +3,12 @@ import {NavigatorScreenParams} from '@react-navigation/native';
 export interface IExercise {
   id: string;
   name: string;
-  sets: ISet[];
   selected: boolean;
 }
 
 export interface ISet {
   id: string;
+  excerciseId: string;
   targetRep?: number;
   targetWeight?: number;
 }

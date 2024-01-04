@@ -7,6 +7,7 @@ import {
   WarningOutlineIcon,
   Button,
   FlatList,
+  Fab,
 } from 'native-base';
 import {useAppSelector, useAppDispatch} from '../../../Store';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -16,6 +17,8 @@ import {useForm, Controller} from 'react-hook-form';
 import {editExerciseName} from '../../../Reducers/ExerciseReducer';
 import {Keyboard} from 'react-native';
 import SetCard from '../../SetCard';
+import Icon from 'react-native-vector-icons/Entypo';
+import {addSet} from '../../../Reducers/SetReducer';
 
 const Exercise: React.FC<ExerciseProps> = ({navigation, route}) => {
   const dispatch = useAppDispatch();
@@ -28,6 +31,9 @@ const Exercise: React.FC<ExerciseProps> = ({navigation, route}) => {
   const exercise = useAppSelector(state => state.exercises).find(
     _exercise => _exercise.id === id,
   );
+  const sets = useAppSelector(state => state.sets).filter(
+    set => set.excerciseId === id,
+  );
 
   const {
     control,
@@ -39,6 +45,7 @@ const Exercise: React.FC<ExerciseProps> = ({navigation, route}) => {
       name: exercise?.name,
     },
   });
+  const name = watch('name');
   const onSubmit = handleSubmit(data => {
     exercise && dispatch(editExerciseName({id: exercise.id, value: data.name}));
 
@@ -73,18 +80,24 @@ const Exercise: React.FC<ExerciseProps> = ({navigation, route}) => {
             </FormControl>
           )}
         />
-        {/* {exercise?.sets.map(set => (
-          <Text>{set.id}</Text>
-        ))} */}
       </Stack>
       <FlatList
-        data={exercise?.sets}
+        data={sets}
         renderItem={({item, index}) => <SetCard set={item} index={index} />}
       />
-      {watch('name') !== exercise?.name && (
+      {name !== exercise?.name && (
         <Button onPress={onSubmit} mx={10} mb={4}>
           Save
         </Button>
+      )}
+      {name === exercise?.name && (
+        <Fab
+          renderInPortal={false}
+          shadow={2}
+          size="sm"
+          icon={<Icon name="plus" size={30} />}
+          onPress={() => dispatch(addSet(id!))}
+        />
       )}
     </Box>
   );

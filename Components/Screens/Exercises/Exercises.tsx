@@ -71,15 +71,26 @@ const Exercises: React.FC<ExerciseProps> = ({navigation}) => {
   };
   const onDelete = () => {
     setselectMode(false);
-    dispatch(deleteSelectedExercise());
+    dispatch(
+      deleteSelectedExercise(
+        exercises.filter(exercise => exercise.selected).map(item => item.id),
+      ),
+    );
   };
 
   useFocusEffect(onFocus);
   useEffect(() => {
     if (!exercises.some(exercise => exercise.selected === true)) {
+      navigation.getParent()?.setOptions({
+        title: 'Exercises',
+      });
       setselectMode(false);
+    } else {
+      navigation.getParent()?.setOptions({
+        title: `${exercises.filter(ex => ex.selected).length} Selected`,
+      });
     }
-  }, [exercises]);
+  }, [exercises, navigation]);
 
   return (
     <Box w="100%" maxWidth="100%" flex={1} bgColor="light.100">

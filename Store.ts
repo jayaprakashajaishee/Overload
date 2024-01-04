@@ -1,10 +1,12 @@
 import {configureStore} from '@reduxjs/toolkit';
 import ExerciseReducer from './Reducers/ExerciseReducer';
+import SetReducer from './Reducers/SetReducer';
 import {useDispatch, useSelector, TypedUseSelectorHook} from 'react-redux';
 
 export const store = configureStore({
   reducer: {
     exercises: ExerciseReducer,
+    sets: SetReducer,
   },
 });
 

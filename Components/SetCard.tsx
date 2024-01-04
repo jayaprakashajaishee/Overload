@@ -1,28 +1,44 @@
 import React from 'react';
 import {ISet} from '../types';
-import {Box, Heading, VStack, FormControl, Slider, Button} from 'native-base';
+import {
+  Box,
+  Heading,
+  VStack,
+  FormControl,
+  Slider,
+  Button,
+  HStack,
+} from 'native-base';
 import {useForm, Controller} from 'react-hook-form';
+import {useAppDispatch} from '../Store';
+import {editSet, deleteSet} from '../Reducers/SetReducer';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const SetCard: React.FC<{set: ISet; index: number}> = ({set, index}) => {
-  const {
-    control,
-    handleSubmit,
-    watch,
-    formState: {errors},
-  } = useForm<FormData>({
+  const dispatch = useAppDispatch();
+  const {control, handleSubmit, watch} = useForm<FormData>({
     defaultValues: {
       targetRep: set.targetRep,
       targetWeight: set.targetWeight,
     },
   });
 
-  console.log(watch('targetRep'));
+  const onSubmit = handleSubmit(data =>
+    dispatch(editSet({id: set.id, value: data})),
+  );
+
   return (
-    <Box shadow={2} bgColor="light.50" my={2} rounded="lg" mx={10}>
+    <Box shadow={2} bgColor={'light.50'} my={2} rounded="lg" mx={10}>
       <VStack space={3}>
-        <Heading fontWeight={10} m={3}>
-          Set {index + 1}
-        </Heading>
+        <HStack justifyContent="space-between" alignItems="center" m={3}>
+          <Heading fontWeight="semibold">Set {index + 1}</Heading>
+          <Icon
+            name="delete"
+            color="red"
+            size={30}
+            onPress={() => dispatch(deleteSet(set.id))}
+          />
+        </HStack>
         <Box mx={8} my={5}>
           <Controller
             name="targetRep"
@@ -69,7 +85,9 @@ const SetCard: React.FC<{set: ISet; index: number}> = ({set, index}) => {
         </Box>
         {(set.targetRep !== watch('targetRep') ||
           set.targetWeight !== watch('targetWeight')) && (
-          <Button m={3}>Save</Button>
+          <Button m={3} onPress={onSubmit}>
+            Save
+          </Button>
         )}
       </VStack>
     </Box>
