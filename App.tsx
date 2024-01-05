@@ -17,6 +17,7 @@ import {RootStackParamList} from './types';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Provider} from 'react-redux';
 import {store} from './Store';
+import SplitNavigator from './Components/Navigator/SplitNavigator';
 
 const HomeScreen: React.FC<HomeProps> = ({navigation}) => {
   return (
@@ -51,6 +52,11 @@ function App(): React.JSX.Element {
               screenOptions={{swipeEnabled: true, swipeEdgeWidth: 100}}>
               <Drawer.Screen name="Home" component={HomeScreen} />
               <Drawer.Screen name="Exercises" component={ExerciseNavigator} />
+              <Drawer.Screen
+                name="Splits"
+                component={SplitNavigator}
+                options={{title: 'Workout Splits'}}
+              />
             </Drawer.Navigator>
           </NavigationContainer>
         </NativeBaseProvider>

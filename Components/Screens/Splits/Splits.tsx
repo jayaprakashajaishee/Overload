@@ -1,50 +1,32 @@
+import React, {useCallback, useState, useEffect} from 'react';
 import {
   Box,
-  Text,
-  FlatList,
   Fab,
-  Center,
-  useDisclose,
-  Actionsheet,
+  FlatList,
   Pressable,
+  Center,
+  Text,
+  Actionsheet,
+  useDisclose,
 } from 'native-base';
-import React, {useCallback, useEffect, useState} from 'react';
-import {useAppSelector, useAppDispatch} from '../../../Store';
-import Icon from 'react-native-vector-icons/Entypo';
+import {SplitsStackParamList} from '../../../types';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {IExercise, ExercisesStackParamList} from '../../../types';
+import Icon from 'react-native-vector-icons/Entypo';
+import {useAppSelector, useAppDispatch} from '../../../Store';
 import {useFocusEffect} from '@react-navigation/native';
-import {
-  selectExercise,
-  selectAllExercise,
-  deleteSelectedExercise,
-} from '../../../Reducers/ExerciseReducer';
+import {ISplit} from '../../../types';
 import ActionButton from '../../ActionButton';
+import {
+  selectSplit,
+  selectAllSplits,
+  deleteSelectedSplits,
+} from '../../../Reducers/SplitReducer';
 
-const Exercises: React.FC<ExerciseProps> = ({navigation}) => {
+const Splits: React.FC<SplitsProps> = ({navigation}) => {
   const dispatch = useAppDispatch();
-  const {isOpen, onOpen, onClose} = useDisclose();
+  const splits = useAppSelector(state => state.splits);
   const [selectMode, setselectMode] = useState<boolean>(false);
-  const exercises = useAppSelector(state => state.exercises);
-
-  const onPress = useCallback<(item: IExercise) => void>(
-    item => {
-      if (selectMode) {
-        dispatch(selectExercise(item.id));
-      } else {
-        navigation.navigate('Exercise', {id: item.id});
-      }
-    },
-    [navigation, selectMode, dispatch],
-  );
-  const onLongPress = useCallback<(item: IExercise) => void>(
-    item => {
-      setselectMode(true);
-      dispatch(selectExercise(item.id));
-    },
-    [dispatch],
-  );
-
+  const {isOpen, onOpen, onClose} = useDisclose();
   const actionSheetButton = useCallback(
     () => <ActionButton onOpen={onOpen} />,
     [onOpen],
@@ -57,40 +39,53 @@ const Exercises: React.FC<ExerciseProps> = ({navigation}) => {
   }, [navigation, actionSheetButton]);
   const onSelectAll = () => {
     setselectMode(true);
-    dispatch(selectAllExercise(true));
+    dispatch(selectAllSplits(true));
   };
   const onDone = () => {
     setselectMode(false);
-    dispatch(selectAllExercise(false));
+    dispatch(selectAllSplits(false));
   };
   const onDelete = () => {
     setselectMode(false);
-    dispatch(
-      deleteSelectedExercise(
-        exercises.filter(exercise => exercise.selected).map(item => item.id),
-      ),
-    );
+    dispatch(deleteSelectedSplits());
   };
+  const onPress = useCallback<(item: ISplit) => void>(
+    item => {
+      if (selectMode) {
+        dispatch(selectSplit(item.id));
+      } else {
+        // navigation.navigate('Split', {id: item.id});
+      }
+    },
+    [selectMode, dispatch],
+  );
+  const onLongPress = useCallback<(item: ISplit) => void>(
+    item => {
+      setselectMode(true);
+      dispatch(selectSplit(item.id));
+    },
+    [dispatch],
+  );
 
   useFocusEffect(onFocus);
   useEffect(() => {
-    if (!exercises.some(exercise => exercise.selected === true)) {
+    if (!splits.some(split => split.selected === true)) {
       navigation.getParent()?.setOptions({
-        title: 'Exercises',
+        title: 'Workout Splits',
       });
       setselectMode(false);
     } else {
       navigation.getParent()?.setOptions({
-        title: `${exercises.filter(ex => ex.selected).length} Selected`,
+        title: `${splits.filter(split => split.selected).length} Selected`,
       });
     }
-  }, [exercises, navigation]);
+  }, [splits, navigation]);
 
   return (
     <Box w="100%" maxWidth="100%" flex={1} bgColor="light.100">
       <FlatList
         my={4}
-        data={exercises}
+        data={splits}
         renderItem={({item}) => (
           <Pressable
             onLongPress={() => onLongPress(item)}
@@ -122,7 +117,7 @@ const Exercises: React.FC<ExerciseProps> = ({navigation}) => {
         shadow={2}
         size="sm"
         icon={<Icon name="plus" size={30} />}
-        onPress={() => navigation.navigate('ExerciseForm')}
+        onPress={() => navigation.navigate('SplitForm')}
       />
       <Actionsheet isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
@@ -135,9 +130,6 @@ const Exercises: React.FC<ExerciseProps> = ({navigation}) => {
   );
 };
 
-type ExerciseProps = NativeStackScreenProps<
-  ExercisesStackParamList,
-  'ExercisesList'
->;
+export default Splits;
 
-export default Exercises;
+type SplitsProps = NativeStackScreenProps<SplitsStackParamList, 'SplitsList'>;
