@@ -1,9 +1,7 @@
 import {
   Box,
-  Text,
   FlatList,
   Fab,
-  Center,
   useDisclose,
   Actionsheet,
   Pressable,
@@ -20,6 +18,7 @@ import {
   deleteSelectedExercise,
 } from '../../../Reducers/ExerciseReducer';
 import ActionButton from '../../ActionButton';
+import ItemCard from '../../ItemCard';
 
 const Exercises: React.FC<ExerciseProps> = ({navigation}) => {
   const dispatch = useAppDispatch();
@@ -97,21 +96,11 @@ const Exercises: React.FC<ExerciseProps> = ({navigation}) => {
             onPress={() => onPress(item)}>
             {({isPressed}) => {
               return (
-                <Center
-                  shadow={2}
-                  bgColor={
-                    item.selected
-                      ? 'light.200'
-                      : isPressed
-                      ? 'light.100'
-                      : 'light.50'
-                  }
-                  mx={5}
-                  my={2}
-                  h="20"
-                  rounded="lg">
-                  <Text fontSize={'2xl'}>{item.name}</Text>
-                </Center>
+                <ItemCard
+                  name={item.name}
+                  isPressed={isPressed}
+                  selected={item.selected}
+                />
               );
             }}
           </Pressable>

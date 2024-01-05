@@ -4,8 +4,6 @@ import {
   Fab,
   FlatList,
   Pressable,
-  Center,
-  Text,
   Actionsheet,
   useDisclose,
 } from 'native-base';
@@ -21,6 +19,7 @@ import {
   selectAllSplits,
   deleteSelectedSplits,
 } from '../../../Reducers/SplitReducer';
+import ItemCard from '../../ItemCard';
 
 const Splits: React.FC<SplitsProps> = ({navigation}) => {
   const dispatch = useAppDispatch();
@@ -92,21 +91,11 @@ const Splits: React.FC<SplitsProps> = ({navigation}) => {
             onPress={() => onPress(item)}>
             {({isPressed}) => {
               return (
-                <Center
-                  shadow={2}
-                  bgColor={
-                    item.selected
-                      ? 'light.200'
-                      : isPressed
-                      ? 'light.100'
-                      : 'light.50'
-                  }
-                  mx={5}
-                  my={2}
-                  h="20"
-                  rounded="lg">
-                  <Text fontSize={'2xl'}>{item.name}</Text>
-                </Center>
+                <ItemCard
+                  isPressed={isPressed}
+                  name={item.name}
+                  selected={item.selected}
+                />
               );
             }}
           </Pressable>
