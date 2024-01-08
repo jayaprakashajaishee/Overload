@@ -110,7 +110,7 @@ const Exercises: React.FC<ExerciseProps> = ({navigation}) => {
         renderInPortal={false}
         shadow={2}
         size="sm"
-        icon={<Icon name="plus" size={30} />}
+        icon={<Icon name="plus" size={30} color="white" />}
         onPress={() => navigation.navigate('ExerciseForm')}
       />
       <Actionsheet isOpen={isOpen} onClose={onClose}>

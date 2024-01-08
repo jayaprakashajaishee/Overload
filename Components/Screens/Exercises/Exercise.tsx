@@ -95,7 +95,7 @@ const Exercise: React.FC<ExerciseProps> = ({navigation, route}) => {
           renderInPortal={false}
           shadow={2}
           size="sm"
-          icon={<Icon name="plus" size={30} />}
+          icon={<Icon name="plus" size={30} color="white" />}
           onPress={() => dispatch(addSet(id!))}
         />
       )}

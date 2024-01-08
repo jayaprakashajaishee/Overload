@@ -105,7 +105,7 @@ const Splits: React.FC<SplitsProps> = ({navigation}) => {
         renderInPortal={false}
         shadow={2}
         size="sm"
-        icon={<Icon name="plus" size={30} />}
+        icon={<Icon name="plus" size={30} color="white" />}
         onPress={() => navigation.navigate('SplitForm')}
       />
       <Actionsheet isOpen={isOpen} onClose={onClose}>
