@@ -5,20 +5,26 @@ import {
   FlatList,
   Pressable,
   Button,
+  Text,
 } from 'native-base';
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {SplitsStackParamList} from '../../../types';
 import {useAppSelector} from '../../../Store';
 import ActionButton from '../../ActionButton';
 import {useFocusEffect} from '@react-navigation/native';
 import ItemCard from '../../ItemCard';
+import SplitExerciseInfo from './SplitExerciseInfo';
 
 const Split: React.FC<SplitProps> = ({navigation, route}) => {
+  const [start, setStart] = useState<boolean>();
   const {id} = route.params;
   const {isOpen, onOpen, onClose} = useDisclose();
   const split = useAppSelector(state => state.splits).find(
     _split => _split.id === id,
+  );
+  const [selectedExercise, setSelectedExercise] = useState<string | undefined>(
+    split?.excerciseIds[0],
   );
   const exercises = useAppSelector(state => state.exercises).filter(exe =>
     split?.excerciseIds.includes(exe.id),
@@ -49,23 +55,26 @@ const Split: React.FC<SplitProps> = ({navigation, route}) => {
             flex={1}
             bgColor="light.100"
             justifyContent="space-between">
+            <SplitExerciseInfo exerciseId={selectedExercise} />
             <FlatList
               data={exercises}
               renderItem={({item}) => (
-                <Pressable>
+                <Pressable onPress={() => setSelectedExercise(item.id)}>
                   {({isPressed}) => (
                     <ItemCard
                       name={item.name}
                       isPressed={isPressed}
-                      selected={item.selected}
+                      selected={selectedExercise === item.id}
                     />
                   )}
                 </Pressable>
               )}
             />
-            <Button mx={10} mb={4}>
-              Start
-            </Button>
+            {selectedExercise && (
+              <Button mx={10} mb={4}>
+                Start
+              </Button>
+            )}
           </Box>
           <Actionsheet isOpen={isOpen} onClose={onClose}>
             <Actionsheet.Content>

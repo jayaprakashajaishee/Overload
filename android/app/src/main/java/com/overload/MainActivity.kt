@@ -1,4 +1,4 @@
-package com.overload
+package com.overload.testapp
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

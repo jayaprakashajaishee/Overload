@@ -1,4 +1,4 @@
-package com.overload
+package com.overload.testapp
 
 import android.app.Application
 import com.facebook.react.PackageList
