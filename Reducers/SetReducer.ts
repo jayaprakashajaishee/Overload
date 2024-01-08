@@ -21,7 +21,7 @@ const SetReducer = createReducer(initialState, builder => {
           targetRep: 0,
           targetWeight: 0,
         })
-        .map(set => ({...set, id: uuid.v4().toString()}));
+        .map(set => ({...set, id: JSON.stringify(uuid.v4())}));
 
       return [...state, ...sets];
     })

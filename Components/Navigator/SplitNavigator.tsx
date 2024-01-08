@@ -6,6 +6,7 @@ import {
 import {RootStackParamList, SplitsStackParamList} from '../../types';
 import Splits from '../Screens/Splits/Splits';
 import SplitForm from '../Screens/Splits/SplitForm';
+import Split from '../Screens/Splits/Split';
 
 const Stack = createNativeStackNavigator<SplitsStackParamList>();
 
@@ -22,6 +23,7 @@ const SplitNavigator: React.FC<ExercisesProps> = () => {
         component={SplitForm}
         options={{title: 'New Split'}}
       />
+      <Stack.Screen name="Split" component={Split} />
     </Stack.Navigator>
   );
 };

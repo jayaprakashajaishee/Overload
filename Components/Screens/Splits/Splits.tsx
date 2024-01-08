@@ -53,10 +53,10 @@ const Splits: React.FC<SplitsProps> = ({navigation}) => {
       if (selectMode) {
         dispatch(selectSplit(item.id));
       } else {
-        // navigation.navigate('Split', {id: item.id});
+        navigation.navigate('Split', {id: item.id});
       }
     },
-    [selectMode, dispatch],
+    [selectMode, dispatch, navigation],
   );
   const onLongPress = useCallback<(item: ISplit) => void>(
     item => {

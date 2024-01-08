@@ -15,7 +15,7 @@ const SplitReducer = createReducer(initalState, builder => {
   builder
     .addCase(addSplit, (state, action) => {
       state.push({
-        id: uuid.v4().toString(),
+        id: JSON.stringify(uuid.v4()),
         excerciseIds: action.payload.exerciseIds,
         name: action.payload.name,
         selected: false,

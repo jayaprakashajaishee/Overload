@@ -18,6 +18,8 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Provider} from 'react-redux';
 import {store} from './Store';
 import SplitNavigator from './Components/Navigator/SplitNavigator';
+import {PersistGate} from 'redux-persist/integration/react';
+import {persistor} from './Store';
 
 const HomeScreen: React.FC<HomeProps> = ({navigation}) => {
   return (
@@ -44,23 +46,25 @@ const Drawer = createDrawerNavigator<RootStackParamList>();
 function App(): React.JSX.Element {
   return (
     <Provider store={store}>
-      <SafeAreaProvider>
-        <NativeBaseProvider>
-          <NavigationContainer>
-            <Drawer.Navigator
-              initialRouteName="Home"
-              screenOptions={{swipeEnabled: true, swipeEdgeWidth: 100}}>
-              <Drawer.Screen name="Home" component={HomeScreen} />
-              <Drawer.Screen name="Exercises" component={ExerciseNavigator} />
-              <Drawer.Screen
-                name="Splits"
-                component={SplitNavigator}
-                options={{title: 'Workout Splits'}}
-              />
-            </Drawer.Navigator>
-          </NavigationContainer>
-        </NativeBaseProvider>
-      </SafeAreaProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <SafeAreaProvider>
+          <NativeBaseProvider>
+            <NavigationContainer>
+              <Drawer.Navigator
+                initialRouteName="Home"
+                screenOptions={{swipeEnabled: true, swipeEdgeWidth: 100}}>
+                <Drawer.Screen name="Home" component={HomeScreen} />
+                <Drawer.Screen name="Exercises" component={ExerciseNavigator} />
+                <Drawer.Screen
+                  name="Splits"
+                  component={SplitNavigator}
+                  options={{title: 'Workout Splits'}}
+                />
+              </Drawer.Navigator>
+            </NavigationContainer>
+          </NativeBaseProvider>
+        </SafeAreaProvider>
+      </PersistGate>
     </Provider>
   );
 }

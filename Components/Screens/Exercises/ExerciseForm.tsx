@@ -36,7 +36,7 @@ const ExerciseFrom: React.FC<ExercisesFormProps> = ({navigation}) => {
   });
 
   const onSubmit = handleSubmit(data => {
-    const id = uuid.v4().toString();
+    const id = JSON.stringify(uuid.v4());
     dispatch(addExercise({id, ...data}));
     reset();
     navigation.navigate('ExercisesList');
