@@ -5,19 +5,21 @@ import {
   FlatList,
   Pressable,
   Button,
-  Text,
+  // Text,
 } from 'native-base';
 import React, {useCallback, useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {SplitsStackParamList} from '../../../types';
-import {useAppSelector} from '../../../Store';
+import {useAppSelector, useAppDispatch} from '../../../Store';
 import ActionButton from '../../ActionButton';
 import {useFocusEffect} from '@react-navigation/native';
 import ItemCard from '../../ItemCard';
 import SplitExerciseInfo from './SplitExerciseInfo';
+import {deleteSplit} from '../../../Reducers/SplitReducer';
 
 const Split: React.FC<SplitProps> = ({navigation, route}) => {
-  const [start, setStart] = useState<boolean>();
+  // const [start, setStart] = useState<boolean>();
+  const dispatch = useAppDispatch();
   const {id} = route.params;
   const {isOpen, onOpen, onClose} = useDisclose();
   const split = useAppSelector(state => state.splits).find(
@@ -78,8 +80,13 @@ const Split: React.FC<SplitProps> = ({navigation, route}) => {
           </Box>
           <Actionsheet isOpen={isOpen} onClose={onClose}>
             <Actionsheet.Content>
-              <Actionsheet.Item>Edit</Actionsheet.Item>
-              <Actionsheet.Item>Delete</Actionsheet.Item>
+              <Actionsheet.Item
+                onPress={() => navigation.navigate('SplitForm', {id})}>
+                Edit
+              </Actionsheet.Item>
+              <Actionsheet.Item onPress={() => dispatch(deleteSplit(id!))}>
+                Delete
+              </Actionsheet.Item>
             </Actionsheet.Content>
           </Actionsheet>
         </>

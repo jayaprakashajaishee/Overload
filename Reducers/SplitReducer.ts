@@ -10,6 +10,12 @@ export const addSplit = createAction<{exerciseIds: string[]; name: string}>(
 export const selectAllSplits = createAction<boolean>('selectAllSplits');
 export const selectSplit = createAction<string>('selectSplit');
 export const deleteSelectedSplits = createAction('deleteSelectedSplit');
+export const deleteSplit = createAction<string>('deleteSplit');
+export const updateSplit = createAction<{
+  id: string;
+  name: string;
+  exerciseIds: string[];
+}>('updateSplit');
 
 const SplitReducer = createReducer(initalState, builder => {
   builder
@@ -33,6 +39,20 @@ const SplitReducer = createReducer(initalState, builder => {
     })
     .addCase(deleteSelectedSplits, state => {
       return state.filter(split => !split.selected);
+    })
+    .addCase(updateSplit, (state, action) => {
+      return state.map(split =>
+        split.id === action.payload.id
+          ? {
+              ...split,
+              name: action.payload.name,
+              excerciseIds: action.payload.exerciseIds,
+            }
+          : split,
+      );
+    })
+    .addCase(deleteSplit, (state, action) => {
+      return state.filter(split => split.id !== action.payload);
     });
 });
 

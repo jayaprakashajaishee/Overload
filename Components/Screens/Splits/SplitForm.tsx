@@ -14,27 +14,48 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {SplitsStackParamList} from '../../../types';
 import {useForm, Controller} from 'react-hook-form';
 import {useAppDispatch, useAppSelector} from '../../../Store';
-import {addSplit} from '../../../Reducers/SplitReducer';
+import {addSplit, updateSplit} from '../../../Reducers/SplitReducer';
 
-const SplitForm: React.FC<SplitFormProps> = ({navigation}) => {
-  const onFocus = useCallback(() => {
-    const parent = navigation.getParent();
-    parent?.setOptions({headerShown: false});
-  }, [navigation]);
+const SplitForm: React.FC<SplitFormProps> = ({navigation, route}) => {
+  const params = route.params;
   const dispatch = useAppDispatch();
   const exercises = useAppSelector(state => state.exercises);
-  const [selectedExercises, setselectedExercises] = useState<string[]>([]);
+  const split = useAppSelector(state => state.splits).find(
+    _split => _split.id === params?.id,
+  );
+  const [selectedExercises, setselectedExercises] = useState<string[]>(
+    split?.excerciseIds || [],
+  );
+
+  const onFocus = useCallback(() => {
+    if (params?.id) {
+      navigation.setOptions({title: 'Edit Set'});
+    }
+    const parent = navigation.getParent();
+    parent?.setOptions({headerShown: false});
+  }, [navigation, params]);
+
   const {
     control,
     handleSubmit,
     formState: {errors},
   } = useForm<FormData>({
     defaultValues: {
-      name: '',
+      name: split?.name || '',
     },
   });
   const onSubmit = handleSubmit(data => {
-    dispatch(addSplit({exerciseIds: selectedExercises, name: data.name}));
+    if (params?.id) {
+      dispatch(
+        updateSplit({
+          name: data.name,
+          exerciseIds: selectedExercises,
+          id: params.id,
+        }),
+      );
+    } else {
+      dispatch(addSplit({exerciseIds: selectedExercises, name: data.name}));
+    }
     navigation.goBack();
   });
   const onCheck: (value: boolean, id: string) => void = (value, id) => {

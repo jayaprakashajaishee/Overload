@@ -35,6 +35,6 @@ export type ExercisesStackParamList = {
 
 export type SplitsStackParamList = {
   SplitsList: undefined;
-  SplitForm: undefined;
+  SplitForm: {id?: string} | undefined;
   Split: {id?: string};
 };
