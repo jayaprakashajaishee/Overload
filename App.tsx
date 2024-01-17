@@ -17,6 +17,15 @@ import {persistor} from './Store';
 import AuthNavigator from './src/navigators/AuthNavigator';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {navigatorDarktheme} from './src/constants/navigatorTheme';
+import {Colors} from 'react-native-ui-lib';
+import {darkColors} from './src/constants/colors';
+
+Colors.loadColors({
+  background: darkColors.background,
+  accent1: darkColors.accent1,
+  accent2: darkColors.accent2,
+  highlight: darkColors.highlight,
+});
 
 function App(): React.JSX.Element {
   return (
