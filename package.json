@@ -16,7 +16,7 @@
     "@react-navigation/native-stack": "^6.9.17",
     "@reduxjs/toolkit": "^2.0.1",
     "@types/react-native-vector-icons": "^6.4.18",
-    "native-base": "^3.4.28",
+    "firebase": "^10.7.1",
     "react": "18.2.0",
     "react-hook-form": "^7.49.2",
     "react-native": "0.73.1",
