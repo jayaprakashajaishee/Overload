@@ -1,13 +1,18 @@
-import {Text, View, TextField, Button, Colors} from 'react-native-ui-lib';
+import React from 'react';
+import {Text, View, Button, Colors} from 'react-native-ui-lib';
 import {safeAreaStyle} from '../styles';
 import {StyleSheet} from 'react-native';
 ('../styles');
-import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {darkColors} from '../constants/colors';
 import {useForm, Controller} from 'react-hook-form';
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import {auth} from '../../firebase/config';
+import {AuthStackParamList} from '../../types/stacktypes';
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import InputField from '../components/InputField';
 
-const LoginPage = () => {
+const LoginPage = ({navigation}: Props) => {
   const {
     control,
     handleSubmit,
@@ -18,7 +23,15 @@ const LoginPage = () => {
       password: '',
     },
   });
-  const onSubmit = handleSubmit(data => console.log(data));
+  const signIn = async (data: FormData) => {
+    console.log(auth);
+    console.log('clicked');
+    signInWithEmailAndPassword(auth, data.username, data.password)
+      .then(userCred => console.log(userCred.user))
+      .catch(error => console.log(error));
+    console.log(data);
+  };
+  const onSubmit = handleSubmit(data => signIn(data));
 
   return (
     <SafeAreaView style={safeAreaStyle.container}>
@@ -32,10 +45,10 @@ const LoginPage = () => {
             required: true,
           }}
           render={({field: {onChange, onBlur, value}}) => (
-            <TextField
+            <InputField
               white
+              width={300}
               placeholderTextColor={Colors.accent1}
-              style={styles.input}
               placeholder="User name"
               onBlur={onBlur}
               onChangeText={onChange}
@@ -51,14 +64,16 @@ const LoginPage = () => {
             required: true,
           }}
           render={({field: {onChange, onBlur, value}}) => (
-            <TextField
+            <InputField
+              textContentType="password"
               white
               placeholderTextColor={Colors.accent1}
-              style={styles.input}
+              width={300}
               placeholder="Password"
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
+              showPasswordIcon
             />
           )}
           name="password"
@@ -78,6 +93,7 @@ const LoginPage = () => {
           bg-background
           outlineColor={Colors.accent1}
           style={styles.button}
+          onPress={() => navigation.navigate('SignUp')}
         />
       </View>
     </SafeAreaView>
@@ -85,22 +101,13 @@ const LoginPage = () => {
 };
 
 const styles = StyleSheet.create({
-  input: {
-    width: 300,
-    height: 50,
-    borderColor: darkColors.accent1,
-    borderWidth: 2,
-    fontSize: 20,
-    borderRadius: 5,
-    margin: 4,
-    padding: 4,
-  },
   button: {
     width: 300,
   },
   logo: {
     fontWeight: 'bold',
   },
+  checkboxLabel: {color: darkColors.accent1, fontSize: 15},
 });
 
 export default LoginPage;
@@ -109,3 +116,5 @@ type FormData = {
   username: string;
   password: string;
 };
+
+type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
