@@ -6,11 +6,11 @@ import {StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {darkColors} from '../constants/colors';
 import {useForm, Controller} from 'react-hook-form';
-import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '../../firebase/config';
 import {AuthStackParamList} from '../../types/stacktypes';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import InputField from '../components/InputField';
+import {loginWithEmailPassword} from '../helpers/authHelpers';
 
 const LoginPage = ({navigation}: Props) => {
   const {
@@ -26,10 +26,8 @@ const LoginPage = ({navigation}: Props) => {
   const signIn = async (data: FormData) => {
     console.log(auth);
     console.log('clicked');
-    signInWithEmailAndPassword(auth, data.username, data.password)
-      .then(userCred => console.log(userCred.user))
-      .catch(error => console.log(error));
-    console.log(data);
+    const {userCred, error} = await loginWithEmailPassword(data);
+    console.log({userCred, error});
   };
   const onSubmit = handleSubmit(data => signIn(data));
 
