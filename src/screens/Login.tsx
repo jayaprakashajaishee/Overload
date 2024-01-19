@@ -34,7 +34,7 @@ const LoginPage = ({navigation}: Props) => {
   return (
     <SafeAreaView style={safeAreaStyle.container}>
       <View flex center>
-        <Text text10 highlight style={styles.logo}>
+        <Text highlight style={styles.logo}>
           Overload
         </Text>
         <Controller
@@ -103,7 +103,9 @@ const styles = StyleSheet.create({
     width: 300,
   },
   logo: {
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
+    fontFamily: 'Barlow-SemiBold',
+    fontSize: 50,
   },
   checkboxLabel: {color: darkColors.accent1, fontSize: 15},
 });

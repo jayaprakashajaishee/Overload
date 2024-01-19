@@ -1,17 +1,11 @@
 import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
-import {
-  View,
-  Text,
-  Button,
-  Colors,
-  //   Toast,
-  LoaderScreen,
-} from 'react-native-ui-lib';
+import {View, Text, Button, Colors} from 'react-native-ui-lib';
 import {darkColors} from '../constants/colors';
 import {useForm, Controller} from 'react-hook-form';
 import {signupWithEmailPassword} from '../helpers/authHelpers';
 import InputField from '../components/InputField';
+import Loading from './Loading';
 
 const SignUpPage = () => {
   const [loading, setloading] = useState(false);
@@ -36,11 +30,7 @@ const SignUpPage = () => {
   });
 
   if (loading) {
-    return (
-      <View flex center>
-        <LoaderScreen color={Colors.highlight} />
-      </View>
-    );
+    return <Loading />;
   }
 
   return (
